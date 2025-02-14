@@ -1,8 +1,8 @@
-import {NgModule} from "@angular/core";
-import {BrowserModule} from "@angular/platform-browser";
-import {ReactiveFormsModule} from "@angular/forms";
-import {HomeComponent} from "./home.component";
-import {CommonModule} from "@angular/common";
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { ReactiveFormsModule } from "@angular/forms";
+import { HomeComponent } from "./home.component";
+import { CommonModule } from "@angular/common";
 
 @NgModule({
     imports: [
@@ -15,7 +15,8 @@ import {CommonModule} from "@angular/common";
     ],
     exports: [
         HomeComponent
-    ]
+    ],
+    providers: []
 })
 export class HomeModule {
 }

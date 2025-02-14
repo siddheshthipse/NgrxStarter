@@ -1,0 +1,85 @@
+<div class="p-card">
+    <p-menubar>
+        <ng-template pTemplate="start">
+            <a href="https://www.fico.com/en" target="_blank">
+                <img src="./../../assets/images/fico-logo-blue.svg" alt="logo" height="40" class="mr-2">
+            </a>
+        </ng-template>
+        <ng-template pTemplate="end">
+            <span class="p-input-icon-left" style="margin-right: 20px;">
+                <i class="pi pi-search"></i>
+                <input style="width: 300px;" #searchInput type="text" pInputText
+                    placeholder="Search user by name (Ctrl + K)" (input)="searchUsers($event)">
+            </span>
+            <p-avatar [label]="'JB'" shape="circle" size="normal" pTooltip="John Brown"
+                [style]="{'background-color': '#fde3cf', 'color': '#f56a00'}">
+            </p-avatar>
+        </ng-template>
+    </p-menubar>
+</div>
+<div class="card" style="margin-top: 18px;">
+    <p-confirmDialog />
+    <p-table [value]="(filteredUsers$ | async) || []" [tableStyle]="{'min-width': '50rem'}"
+        [loading]="(loading$ | async) || false" editMode="row" [styleClass]="'p-datatable-sm'">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="user">
+                <td>{{user.id}}</td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [formControl]="getFormControl(ri, 'name')!">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{user.name}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [formControl]="getFormControl(ri, 'username')!">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{user.username}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="email" [formControl]="getFormControl(ri, 'email')!">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{user.email}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                            (click)="onRowEditInit(user, ri)" pTooltip="Edit user"
+                            class="p-button-rounded p-button-text"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                            (click)="onRowEditSave(ri)" pTooltip="Save changes"
+                            class="p-button-rounded p-button-text p-button-success"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                            (click)="onRowEditCancel(user, ri)" pTooltip="Cancel edit"
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-trash"
+                            (click)="deleteUser(user)" pTooltip="Delete user"
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
