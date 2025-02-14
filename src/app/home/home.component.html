@@ -64,7 +64,7 @@
                     </p-cellEditor>
                 </td>
                 <td>
-                    <div class="flex align-items-center justify-content-center gap-2">
+                    <div class="flex align-items-start justify-content-start gap-2">
                         <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                             (click)="onRowEditInit(user, ri)" pTooltip="Edit user"
                             class="p-button-rounded p-button-text"></button>
@@ -77,9 +77,70 @@
                         <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-trash"
                             (click)="deleteUser(user)" pTooltip="Delete user"
                             class="p-button-rounded p-button-text p-button-danger"></button>
+                        <button pButton pRipple type="button" icon="pi pi-info-circle" (click)="showUserInfo(user)"
+                            pTooltip="View user info" class="p-button-rounded p-button-text"></button>
                     </div>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
+
+<p-sidebar [(visible)]="sidebarVisible" position="right" [style]="{'width':'35rem'}">
+    <ng-template pTemplate="header">
+        <div class="flex align-items-center">
+            <p-avatar [label]="selectedUser ? getInitials(selectedUser.name) : ''" shape="circle"
+                [style]="getRandomColor()">
+            </p-avatar>
+            <span class="ml-2 font-bold">{{selectedUser?.name}}</span>
+        </div>
+    </ng-template>
+    <div *ngIf="selectedUser" class="fluid">
+        <div class="field">
+            <label class="font-semibold">Personal Information</label>
+            <div class="grid mt-2">
+                <div class="col-4 font-medium">Username:</div>
+                <div class="col-8">{{selectedUser.username}}</div>
+                <div class="col-4 font-medium">Email:</div>
+                <div class="col-8">
+                    <a href="mailto:{{selectedUser.email}}">{{selectedUser.email}}</a>
+                </div>
+                <div class="col-4 font-medium">Phone:</div>
+                <div class="col-8">{{selectedUser.phone}}</div>
+                <div class="col-4 font-medium">Website:</div>
+                <div class="col-8">{{selectedUser.website}}</div>
+            </div>
+        </div>
+
+        <div class="field mt-4">
+            <label class="font-semibold">Address</label>
+            <div class="grid mt-2">
+                <div class="col-4 font-medium">Street:</div>
+                <div class="col-8">{{selectedUser.address.street}}</div>
+                <div class="col-4 font-medium">Suite:</div>
+                <div class="col-8">{{selectedUser.address.suite}}</div>
+                <div class="col-4 font-medium">City:</div>
+                <div class="col-8">{{selectedUser.address.city}}</div>
+                <div class="col-4 font-medium">Zipcode:</div>
+                <div class="col-8">{{selectedUser.address.zipcode}}</div>
+                <div class="col-4 font-medium">Location:</div>
+                <div class="col-8">
+                    Lat: {{selectedUser.address.geo.lat}},
+                    Lng: {{selectedUser.address.geo.lng}}
+                </div>
+            </div>
+        </div>
+
+        <div class="field mt-4">
+            <label class="font-semibold">Company</label>
+            <div class="grid mt-2">
+                <div class="col-4 font-medium">Name:</div>
+                <div class="col-8">{{selectedUser.company.name}}</div>
+                <div class="col-4 font-medium">Catch Phrase:</div>
+                <div class="col-8">{{selectedUser.company.catchPhrase}}</div>
+                <div class="col-4 font-medium">Business Service:</div>
+                <div class="col-8">{{selectedUser.company.bs}}</div>
+            </div>
+        </div>
+    </div>
+</p-sidebar>

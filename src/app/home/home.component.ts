@@ -85,7 +85,6 @@ export class HomeComponent {
   }
 
   deleteUser(user: User) {
-    console.log('Called delete')
     this.confirmationService.confirm({
       message: `Are you sure you want to delete ${user.name}?`,
       header: 'Confirm Delete',
@@ -98,5 +97,29 @@ export class HomeComponent {
         this.store.dispatch(UserActions.deleteUser({ id: user.id }));
       }
     });
+  }
+
+  sidebarVisible = false;
+  selectedUser: User | null = null;
+
+  getInitials(name: string): string {
+    return name.split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase();
+  }
+
+  getRandomColor(): { background: string, text: string } {
+    const colors = [
+      { background: '#fde3cf', text: '#f56a00' },
+      { background: '#e6f7ff', text: '#1890ff' },
+      { background: '#f6ffed', text: '#52c41a' }
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  showUserInfo(user: User) {
+    this.selectedUser = user;
+    this.sidebarVisible = true;
   }
 }
