@@ -18,7 +18,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { MenubarModule } from 'primeng/menubar';
 import { AvatarModule } from 'primeng/avatar';
 import { SidebarModule } from 'primeng/sidebar';
-import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
 
 import { AppComponent } from './app.component';
@@ -51,7 +50,6 @@ import { UserEffects } from './state/user.effects';
         MenubarModule,
         AvatarModule,
         SidebarModule,
-        SkeletonModule,
         ToastModule,
         RippleModule
     ],

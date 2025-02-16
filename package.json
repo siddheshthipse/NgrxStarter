@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "service": "ng g s service/user"
+    "vercel": "vercel"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +28,7 @@
     "primeng": "^17.18.15",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "vercel": "^41.1.4",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
