@@ -46,6 +46,7 @@ export class UserEffects {
             mergeMap(({ user }) => this.userService.updateUser(user)
                 .pipe(
                     map(updatedUser => {
+                        this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Success',
@@ -54,6 +55,7 @@ export class UserEffects {
                         return UserActions.updateUserSuccess({ user: updatedUser });
                     }),
                     catchError(error => {
+                        this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',

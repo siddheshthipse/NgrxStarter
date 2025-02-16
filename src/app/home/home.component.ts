@@ -47,7 +47,6 @@ export class HomeComponent {
   ngOnInit() {
     this.store.dispatch(UserActions.loadUsers());
 
-    // Subscribe to users to create forms
     this.users$.subscribe(users => {
       this.forms = users.map(user => this.createForm(user));
     });
@@ -71,13 +70,42 @@ export class HomeComponent {
 
   onRowEditSave(ri: number) {
     if (this.forms[ri].valid) {
-      // Get current user from state
+      const formValue = this.forms[ri].value;
+
+      // Check for duplicate username
       this.users$.pipe(
         take(1),
-        map(users => users.find(user => user.id === ri + 1))
-      ).subscribe(currentUser => {
+        map(users => {
+          // Find current user and check if username exists for other users
+          const currentUser = users.find(user => user.id === ri + 1);
+          const isDuplicateUsername = users.some(user =>
+            user.username.toLowerCase() === formValue.username.toLowerCase() &&
+            user.id !== ri + 1
+          );
+
+          return { currentUser, isDuplicateUsername };
+        })
+      ).subscribe(({ currentUser, isDuplicateUsername }) => {
+        if (isDuplicateUsername) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Username taken',
+            detail: 'Username already exists. Please choose a different username.',
+            life: 3000
+          });
+          return;
+        }
+
         if (currentUser) {
-          const formValue = this.forms[ri].value;
+          // Show in-progress message
+          this.messageService.add({
+            severity: 'info',
+            summary: 'In Progress',
+            detail: 'Updating user...',
+            life: 3000
+          });
+
+          // Dispatch update with all existing data plus form changes
           this.store.dispatch(UserActions.updateUser({
             user: {
               ...currentUser,
@@ -89,7 +117,7 @@ export class HomeComponent {
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Invalid',
+        summary: 'Invalid Form',
         detail: 'Please check all required fields',
         life: 3000
       });
@@ -136,10 +164,8 @@ export class HomeComponent {
 
   showUserInfo(user: User) {
     console.log('Input args', user)
-    // Get complete user data from state using id
     this.users$.pipe(
       map(users => users.find(u => u.id === user.id)),
-      take(1)  // Take only first emission and then complete
     ).subscribe(completeUser => {
       if (completeUser) {
         this.selectedUser = completeUser;
