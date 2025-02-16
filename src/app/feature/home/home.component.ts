@@ -1,9 +1,9 @@
 import { Component, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { User } from '../state/user.model';
-import * as UserActions from '../state/user.actions';
-import * as UserSelectors from '../state/user.selectors';
+import { User } from '../../state/user.model';
+import * as UserActions from '../../state/user.actions';
+import * as UserSelectors from '../../state/user.selectors';
 import { map, take } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
@@ -72,11 +72,9 @@ export class HomeComponent {
     if (this.forms[ri].valid) {
       const formValue = this.forms[ri].value;
 
-      // Check for duplicate username
       this.users$.pipe(
         take(1),
         map(users => {
-          // Find current user and check if username exists for other users
           const currentUser = users.find(user => user.id === ri + 1);
           const isDuplicateUsername = users.some(user =>
             user.username.toLowerCase() === formValue.username.toLowerCase() &&
@@ -97,7 +95,6 @@ export class HomeComponent {
         }
 
         if (currentUser) {
-          // Show in-progress message
           this.messageService.add({
             severity: 'info',
             summary: 'In Progress',
@@ -105,7 +102,6 @@ export class HomeComponent {
             life: 3000
           });
 
-          // Dispatch update with all existing data plus form changes
           this.store.dispatch(UserActions.updateUser({
             user: {
               ...currentUser,

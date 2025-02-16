@@ -22,7 +22,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './feature/home/home.component';
 import { userReducer } from './state/user.reducer';
 import { UserEffects } from './state/user.effects';
 
