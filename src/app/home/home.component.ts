@@ -4,8 +4,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { User } from '../state/user.model';
 import * as UserActions from '../state/user.actions';
 import * as UserSelectors from '../state/user.selectors';
-import { map } from 'rxjs';
-import { ConfirmationService } from 'primeng/api';
+import { map, take } from 'rxjs';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'home',
@@ -16,7 +16,8 @@ export class HomeComponent {
   constructor(
     private store: Store,
     private fb: FormBuilder,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) { }
 
   @ViewChild('searchInput') searchInput!: ElementRef;
@@ -70,13 +71,28 @@ export class HomeComponent {
 
   onRowEditSave(ri: number) {
     if (this.forms[ri].valid) {
-      const formValue = this.forms[ri].value;
-      this.store.dispatch(UserActions.updateUser({
-        user: {
-          ...formValue,
-          id: ri + 1 // Assuming IDs are 1-based
+      // Get current user from state
+      this.users$.pipe(
+        take(1),
+        map(users => users.find(user => user.id === ri + 1))
+      ).subscribe(currentUser => {
+        if (currentUser) {
+          const formValue = this.forms[ri].value;
+          this.store.dispatch(UserActions.updateUser({
+            user: {
+              ...currentUser,
+              ...formValue
+            }
+          }));
         }
-      }));
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Invalid',
+        detail: 'Please check all required fields',
+        life: 3000
+      });
     }
   }
 
@@ -119,7 +135,17 @@ export class HomeComponent {
   }
 
   showUserInfo(user: User) {
-    this.selectedUser = user;
-    this.sidebarVisible = true;
+    console.log('Input args', user)
+    // Get complete user data from state using id
+    this.users$.pipe(
+      map(users => users.find(u => u.id === user.id)),
+      take(1)  // Take only first emission and then complete
+    ).subscribe(completeUser => {
+      if (completeUser) {
+        this.selectedUser = completeUser;
+        console.log('Complete', completeUser, 'Selected', this.selectedUser)
+        this.sidebarVisible = true;
+      }
+    });
   }
 }

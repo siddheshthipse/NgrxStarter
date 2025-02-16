@@ -3,13 +3,16 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import * as UserActions from './user.actions';
 import { UserService } from './../service/user.service';
+import { MessageService } from 'primeng/api';
+
 
 @Injectable()
 export class UserEffects {
 
     constructor(
         private actions$: Actions,
-        private userService: UserService
+        private userService: UserService,
+        private messageService: MessageService
     ) { }
 
     loadUsers$ = createEffect(() =>
@@ -17,8 +20,22 @@ export class UserEffects {
             ofType(UserActions.loadUsers),
             mergeMap(() => this.userService.getUsers()
                 .pipe(
-                    map(users => UserActions.loadUsersSuccess({ users })),
-                    catchError(error => of(UserActions.loadUsersFailure({ error })))
+                    map(users => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Users loaded successfully'
+                        });
+                        return UserActions.loadUsersSuccess({ users });
+                    }),
+                    catchError(error => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Something went wrong, please try again'
+                        });
+                        return of(UserActions.loadUsersFailure({ error }));
+                    })
                 ))
         )
     );
@@ -28,8 +45,22 @@ export class UserEffects {
             ofType(UserActions.updateUser),
             mergeMap(({ user }) => this.userService.updateUser(user)
                 .pipe(
-                    map(updatedUser => UserActions.updateUserSuccess({ user: updatedUser })),
-                    catchError(error => of(UserActions.updateUserFailure({ error })))
+                    map(updatedUser => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'User updated successfully'
+                        });
+                        return UserActions.updateUserSuccess({ user: updatedUser });
+                    }),
+                    catchError(error => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Something went wrong, please try again'
+                        });
+                        return of(UserActions.updateUserFailure({ error }));
+                    })
                 ))
         )
     );
@@ -39,8 +70,22 @@ export class UserEffects {
             ofType(UserActions.deleteUser),
             mergeMap(({ id }) => this.userService.deleteUser(id)
                 .pipe(
-                    map(() => UserActions.deleteUserSuccess({ id })),
-                    catchError(error => of(UserActions.deleteUserFailure({ error })))
+                    map(() => {
+                        this.messageService.add({
+                            severity: 'info',
+                            summary: 'Info',
+                            detail: 'User deleted successfully'
+                        });
+                        return UserActions.deleteUserSuccess({ id });
+                    }),
+                    catchError(error => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Something went wrong, please try again'
+                        });
+                        return of(UserActions.deleteUserFailure({ error }));
+                    })
                 ))
         )
     );

@@ -19,6 +19,7 @@
 </div>
 <div class="card" style="margin-top: 18px;">
     <p-confirmDialog />
+    <p-toast />
     <p-table [value]="(filteredUsers$ | async) || []" [tableStyle]="{'min-width': '50rem'}"
         [loading]="(loading$ | async) || false" editMode="row" [styleClass]="'p-datatable-sm'">
         <ng-template pTemplate="header">
@@ -77,10 +78,15 @@
                         <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-trash"
                             (click)="deleteUser(user)" pTooltip="Delete user"
                             class="p-button-rounded p-button-text p-button-danger"></button>
-                        <button pButton pRipple type="button" icon="pi pi-info-circle" (click)="showUserInfo(user)"
+                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-info-circle" (click)="showUserInfo(user)"
                             pTooltip="View user info" class="p-button-rounded p-button-text"></button>
                     </div>
                 </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="5">No users found.</td>
             </tr>
         </ng-template>
     </p-table>

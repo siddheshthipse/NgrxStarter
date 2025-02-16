@@ -12,13 +12,14 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { MenubarModule } from 'primeng/menubar';
 import { AvatarModule } from 'primeng/avatar';
 import { SidebarModule } from 'primeng/sidebar';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ToastModule } from 'primeng/toast';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -51,9 +52,10 @@ import { UserEffects } from './state/user.effects';
         AvatarModule,
         SidebarModule,
         SkeletonModule,
+        ToastModule,
         RippleModule
     ],
-    providers: [ConfirmationService],
+    providers: [ConfirmationService, MessageService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
