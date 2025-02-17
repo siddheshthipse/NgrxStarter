@@ -68,57 +68,57 @@ export class HomeComponent {
     this.forms[ri] = this.createForm(user);
   }
 
-  onRowEditSave(ri: number) {
+  onRowEditSave(ri: number, user: User) {
     if (this.forms[ri].valid) {
-        const formValue = this.forms[ri].value;
-        
-        this.users$.pipe(
-            take(1),
-            map(users => {
-                const currentUser = users.find(user => user.id === ri + 1);
-                const isDuplicateUsername = formValue.username !== currentUser?.username && 
-                    users.some(user => 
-                        user.username.toLowerCase() === formValue.username.toLowerCase() && 
-                        user.id !== currentUser?.id
-                    );
-                return { currentUser, isDuplicateUsername };
-            })
-        ).subscribe(({ currentUser, isDuplicateUsername }) => {
-            if (isDuplicateUsername) {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Validation Error',
-                    detail: 'Username already exists. Please choose a different username.',
-                    life: 3000
-                });
-                return;
-            }
- 
-            if (currentUser) {
-                this.messageService.add({
-                    severity: 'info',
-                    summary: 'In Progress',
-                    detail: 'Updating user...',
-                    life: 3000
-                });
- 
-                this.store.dispatch(UserActions.updateUser({
-                    user: {
-                        ...currentUser,
-                        ...formValue
-                    }
-                }));
-            }
-        });
-    } else {
-        this.messageService.add({
+      const formValue = this.forms[ri].value;
+
+      this.users$.pipe(
+        take(1),
+        map(users => {
+          const currentUser = users.find(u => u.id === user.id);
+          const isDuplicateUsername = formValue.username !== currentUser?.username &&
+            users.some(u =>
+              u.username.toLowerCase() === formValue.username.toLowerCase() &&
+              u.id !== currentUser?.id
+            );
+          return { currentUser, isDuplicateUsername };
+        })
+      ).subscribe(({ currentUser, isDuplicateUsername }) => {
+        if (isDuplicateUsername) {
+          this.messageService.add({
             severity: 'error',
-            summary: 'Invalid Form',
-            detail: 'Please check all required fields',
+            summary: 'Validation Error',
+            detail: 'Username already exists. Please choose a different username.',
             life: 3000
-        });
+          });
+          return;
+        }
+
+        if (currentUser) {
+          this.messageService.add({
+            severity: 'info',
+            summary: 'In Progress',
+            detail: 'Updating user...',
+            life: 3000
+          });
+
+          this.store.dispatch(UserActions.updateUser({
+            user: {
+              ...currentUser,
+              ...formValue
+            }
+          }));
+        }
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Invalid Form',
+        detail: 'Please check all required fields',
+        life: 3000
+      });
     }
- }
+  }
 
   onRowEditCancel(user: User, ri: number) {
     this.forms[ri] = this.createForm(user);

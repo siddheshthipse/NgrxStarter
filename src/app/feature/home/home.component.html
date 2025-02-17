@@ -70,16 +70,18 @@
                             (click)="onRowEditInit(user, ri)" pTooltip="Edit user"
                             class="p-button-rounded p-button-text"></button>
                         <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                            (click)="onRowEditSave(ri)" pTooltip="Save changes"
-                            class="p-button-rounded p-button-text p-button-success"></button>
+                            (click)="onRowEditSave(ri, user)" pTooltip="Save changes"
+                            class="p-button-rounded p-button-text p-button-success">
+                        </button>
                         <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
                             (click)="onRowEditCancel(user, ri)" pTooltip="Cancel edit"
                             class="p-button-rounded p-button-text p-button-danger"></button>
                         <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-trash"
                             (click)="deleteUser(user)" pTooltip="Delete user"
                             class="p-button-rounded p-button-text p-button-danger"></button>
-                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-info-circle" (click)="showUserInfo(user)"
-                            pTooltip="View user info" class="p-button-rounded p-button-text"></button>
+                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-info-circle"
+                            (click)="showUserInfo(user)" pTooltip="View user info"
+                            class="p-button-rounded p-button-text"></button>
                     </div>
                 </td>
             </tr>
