@@ -1,23 +1,25 @@
-<div class="p-card">
-    <p-menubar>
-        <ng-template pTemplate="start">
-            <a href="https://www.fico.com/en" target="_blank">
-                <img src="./../../assets/images/fico-logo-blue.svg" alt="logo" height="40" class="mr-2">
-            </a>
-        </ng-template>
-        <ng-template pTemplate="end">
-            <span class="p-input-icon-left" style="margin-right: 20px;">
+<p-menubar>
+    <ng-template pTemplate="start">
+        <a href="https://www.fico.com/en" target="_blank">
+            <img src="./../../assets/images/fico-logo-blue.svg" alt="logo" height="40" class="mr-2">
+        </a>
+    </ng-template>
+    <ng-template pTemplate="end">
+        <div class="flex align-items-center">
+            <span class="p-input-icon-left search-container">
                 <i class="pi pi-search"></i>
-                <input style="width: 300px;" #searchInput type="text" pInputText
-                    placeholder="Search user by name (Ctrl + K)" (input)="searchUsers($event)">
+                <input #searchInput type="text" pInputText
+                    placeholder="Search user by name (Ctrl + K)" (input)="searchUsers($event)"
+                    class="search-input">
             </span>
             <p-avatar [label]="'JB'" shape="circle" size="normal" pTooltip="John Brown"
-                [style]="{'background-color': '#fde3cf', 'color': '#f56a00'}">
+                [style]="{'background-color': '#fde3cf', 'color': '#f56a00'}" 
+                class="ml-2">
             </p-avatar>
-        </ng-template>
-    </p-menubar>
-</div>
-<div class="card" style="margin-top: 18px;">
+        </div>
+    </ng-template>
+</p-menubar>
+<div style="margin-top: 18px;">
     <p-confirmDialog />
     <p-toast />
     <p-table [value]="(filteredUsers$ | async) || []" [tableStyle]="{'min-width': '50rem'}"

@@ -2,3 +2,55 @@
     background-color: lightgrey;
     padding: 0.5rem 0.5rem;
 }
+
+.search-container {
+    margin-right: 20px;
+}
+
+.search-input {
+    width: 300px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .search-input {
+        width: 180px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .search-container {
+        margin-right: 10px;
+    }
+
+    .search-input {
+        width: 120px;
+    }
+
+    :host ::ng-deep .p-menubar {
+        padding: 0.5rem;
+    }
+
+    :host ::ng-deep .p-menubar-start img {
+        height: 30px;
+    }
+}
+
+@media screen and (max-width: 430px) {
+    .search-input {
+        width: 100px;
+    }
+
+    :host ::ng-deep .p-menubar-start img {
+        height: 24px;
+    }
+
+    :host ::ng-deep .p-avatar {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    :host ::ng-deep .p-avatar-text {
+        font-size: 0.875rem;
+    }
+}
