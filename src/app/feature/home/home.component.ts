@@ -94,7 +94,7 @@ export class HomeComponent {
           this.messageService.add({
             severity: 'error',
             summary: 'Validation Error',
-            detail: 'Username already exists. Please choose a different username.',
+            detail: `Username "${formValue.username}" already exists. Please choose a different username.`,
             life: 3000
           });
           return;
