@@ -33,7 +33,7 @@ export class HomeComponent {
   users$ = this.store.select(UserSelectors.selectAllUsers);
   filteredUsers$ = this.users$;
   loading$ = this.store.select(UserSelectors.selectUserLoading);
-  forms: FormGroup[] = [];
+  forms = new Map<number, FormGroup>();
 
   searchUsers(event: any) {
     const searchTerm = event.target.value.toLowerCase();
@@ -48,7 +48,11 @@ export class HomeComponent {
     this.store.dispatch(UserActions.loadUsers());
 
     this.users$.subscribe(users => {
-      this.forms = users.map(user => this.createForm(user));
+      users.forEach(user => {
+        if (!this.forms.has(user.id)) {
+          this.forms.set(user.id, this.createForm(user));
+        }
+      });
     });
   }
 
@@ -60,17 +64,19 @@ export class HomeComponent {
     });
   }
 
-  getFormControl(rowIndex: number, field: string): FormControl {
-    return this.forms[rowIndex]?.get(field) as FormControl;
+  getFormControl(user: User, field: string): FormControl {
+    return this.forms.get(user.id)?.get(field) as FormControl;
   }
 
-  onRowEditInit(user: User, ri: number) {
-    this.forms[ri] = this.createForm(user);
+  onRowEditInit(user: User) {
+    this.forms.set(user.id, this.createForm(user));
   }
 
-  onRowEditSave(ri: number, user: User) {
-    if (this.forms[ri].valid) {
-      const formValue = this.forms[ri].value;
+  onRowEditSave(user: User) {
+    const form = this.forms.get(user.id);
+
+    if (form?.valid) {
+      const formValue = form.value;
 
       this.users$.pipe(
         take(1),
@@ -120,8 +126,8 @@ export class HomeComponent {
     }
   }
 
-  onRowEditCancel(user: User, ri: number) {
-    this.forms[ri] = this.createForm(user);
+  onRowEditCancel(user: User) {
+    this.forms.set(user.id, this.createForm(user));
   }
 
   deleteUser(user: User) {
@@ -159,13 +165,14 @@ export class HomeComponent {
   }
 
   showUserInfo(user: User) {
-    console.log('Input args', user)
+    console.log('Input args', user);
     this.users$.pipe(
       map(users => users.find(u => u.id === user.id)),
+      take(1)
     ).subscribe(completeUser => {
       if (completeUser) {
         this.selectedUser = completeUser;
-        console.log('Complete', completeUser, 'Selected', this.selectedUser)
+        console.log('Complete', completeUser, 'Selected', this.selectedUser);
         this.sidebarVisible = true;
       }
     });

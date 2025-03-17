@@ -11,6 +11,10 @@
     width: 300px;
 }
 
+/* :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+    padding: 2px 2px;
+} */
+
 /* Responsive styles */
 @media screen and (max-width: 768px) {
     .search-input {

@@ -8,13 +8,11 @@
         <div class="flex align-items-center">
             <span class="p-input-icon-left search-container">
                 <i class="pi pi-search"></i>
-                <input #searchInput type="text" pInputText
-                    placeholder="Search user by name (Ctrl + K)" (input)="searchUsers($event)"
-                    class="search-input">
+                <input #searchInput type="text" pInputText placeholder="Search user by name (Ctrl + K)"
+                    (input)="searchUsers($event)" class="search-input">
             </span>
             <p-avatar [label]="'JB'" shape="circle" size="normal" pTooltip="John Brown"
-                [style]="{'background-color': '#fde3cf', 'color': '#f56a00'}" 
-                class="ml-2">
+                [style]="{'background-color': '#fde3cf', 'color': '#f56a00'}" class="ml-2">
             </p-avatar>
         </div>
     </ng-template>
@@ -39,7 +37,7 @@
                 <td>
                     <p-cellEditor>
                         <ng-template pTemplate="input">
-                            <input pInputText type="text" [formControl]="getFormControl(ri, 'name')!">
+                            <input pInputText type="text" [formControl]="getFormControl(user, 'name')!">
                         </ng-template>
                         <ng-template pTemplate="output">
                             {{user.name}}
@@ -49,7 +47,7 @@
                 <td>
                     <p-cellEditor>
                         <ng-template pTemplate="input">
-                            <input pInputText type="text" [formControl]="getFormControl(ri, 'username')!">
+                            <input pInputText type="text" [formControl]="getFormControl(user, 'username')!">
                         </ng-template>
                         <ng-template pTemplate="output">
                             {{user.username}}
@@ -59,7 +57,7 @@
                 <td>
                     <p-cellEditor>
                         <ng-template pTemplate="input">
-                            <input pInputText type="email" [formControl]="getFormControl(ri, 'email')!">
+                            <input pInputText type="email" [formControl]="getFormControl(user, 'email')!">
                         </ng-template>
                         <ng-template pTemplate="output">
                             {{user.email}}
@@ -67,16 +65,15 @@
                     </p-cellEditor>
                 </td>
                 <td>
-                    <div class="flex align-items-start justify-content-start gap-2">
+                    <div class="flex align-items-center justify-content-start gap-2">
                         <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                            (click)="onRowEditInit(user, ri)" pTooltip="Edit user"
+                            (click)="onRowEditInit(user)" pTooltip="Edit user"
                             class="p-button-rounded p-button-text"></button>
                         <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                            (click)="onRowEditSave(ri, user)" pTooltip="Save changes"
-                            class="p-button-rounded p-button-text p-button-success">
-                        </button>
+                            (click)="onRowEditSave(user)" pTooltip="Save changes"
+                            class="p-button-rounded p-button-text p-button-success"></button>
                         <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                            (click)="onRowEditCancel(user, ri)" pTooltip="Cancel edit"
+                            (click)="onRowEditCancel(user)" pTooltip="Cancel edit"
                             class="p-button-rounded p-button-text p-button-danger"></button>
                         <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-trash"
                             (click)="deleteUser(user)" pTooltip="Delete user"
